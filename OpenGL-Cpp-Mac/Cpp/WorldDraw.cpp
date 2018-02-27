@@ -146,7 +146,7 @@ void World::draw2D(float w, float h) {
     
     /// Draw text
     glUniform4fv(_shpf->uniform("vColor"), 1, glm::value_ptr(glm::vec4(1, 1, 1, 1)));
-    fnt1.Print("HW 11 by Barashev Ivan", 32, 64, 96);
+    fnt1.Print("Maid by AivanF.", 32, 64, 96);
     
     glUniform4fv(_shpf->uniform("vColor"), 1, glm::value_ptr(glm::vec4(1, 0, 0, 1)));
     fnt2.Print("WASD to move, Escape - screenshot\nTab - fog, Space - stop time", 32, 192, 32);
