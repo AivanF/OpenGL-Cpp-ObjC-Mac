@@ -110,8 +110,8 @@ The implementation is here: [full.frag](https://github.com/AivanF/OpenGL-Cpp-Obj
 My algorithm is very flexible and is capable of creation a model of any torus, srping, spiral, or a combination of them.
  It takes the following parameters:
 
-- int **cntin** – verticis count in inner circle.
-- int **cntout** – verticis count in outer circle.
+- int **cntin** – vertices count in inner circle.
+- int **cntout** – count of inner circles in outer circle.
 - float **radin** – radius of inner circle.
 - float **radout** – radius of outer circle.
 - int **turnscnt** - count of turns.
@@ -130,7 +130,7 @@ Here you can see the obtained toruses with and w\o normal maps:
 
 This algorithm was also used in my other project: [Own 3D Engine](https://github.com/AivanF/own-3d-engine) (no OpenGL, just C++ & Qt)
 
-![toruses](http://aivanf.com/static/toruses.png)
+![toruses](http://www.aivanf.com/static/cv/engine3d.jpg)
 
 ---
 # License
