@@ -5,6 +5,7 @@
 //  Created by Barsehv Ivan on 21/02/2018.
 //  Copyright © 2018 AivanF. All rights reserved.
 //
+
 /*
  AivanF. License:
  
@@ -24,6 +25,7 @@
  
  3 This notice may not be removed or altered from any source distribution.
  */
+
 
 #include "ItemTorus.hpp"
 #include "ShaderProgram.hpp"
