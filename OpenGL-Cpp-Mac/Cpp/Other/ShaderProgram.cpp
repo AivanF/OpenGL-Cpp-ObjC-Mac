@@ -42,10 +42,18 @@ GLuint ShaderProgram::index() {
     return program;
 }
 
-GLuint ShaderProgram::attr(const GLchar *name) {
-    return glGetAttribLocation(program, name);
+GLint ShaderProgram::attr(const GLchar *name) {
+    GLint res = glGetAttribLocation(program, name);
+    if (res < 0) {
+        assert(0);
+    }
+    return res;
 }
 
-GLuint ShaderProgram::uniform(const GLchar *name) {
-    return glGetUniformLocation(program, name);
+GLint ShaderProgram::uniform(const GLchar *name) {
+    GLint res = glGetUniformLocation(program, name);
+    if (res < 0) {
+        assert(0);
+    }
+    return res;
 }

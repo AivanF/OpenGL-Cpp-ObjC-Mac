@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ShaderProgram.hpp"
+#include "CubeFBO.hpp"
 #include "../../glm/glm.hpp"
 #include <string>
 
@@ -16,6 +17,8 @@ public:
 	float fExpAtt;
     
     bool active;
+    
+    CubeFBO shadowMap;
 
 	void SetUniformData(ShaderProgram *shp, std::string sLightVarName);
 

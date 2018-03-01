@@ -14,8 +14,8 @@
 void World::prepareFX() {
     /// Sunlight
     {
-        _dirlight.fAmbient = 0.3;
-        _dirlight.vColor = glm::vec3(1.0f, 0.98f, 0.9f) * (float)(1.0f + 0.5f * cos(degreesToRadians(par)));
+        _dirlight.fAmbient = 0.1;
+        _dirlight.vColor = glm::vec3(1.0f, 0.98f, 0.9f) * (float)(0.9f + 0.45f * cos(degreesToRadians(par)));
 //        _dirlight.vDirection = glm::vec3(0.4f, -0.8f, -0.447214f);
         glm::mat4 rot = glm::rotate(glm::mat4(), (float)degreesToRadians(45), glm::vec3(1.0f, 0.0f, 0.0f));
         rot = glm::rotate(rot, (float)degreesToRadians(par), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -23,34 +23,19 @@ void World::prepareFX() {
         glm::vec3 dir(0.0f, -1.0f, 0.0f);
         dir = glm::mat3(rot) * dir;
         _dirlight.vDirection = dir;
-//        printMat(glm::value_ptr(rot));
-//        printVec(glm::value_ptr(dir), 3);
-        
-        _dirlight.SetUniformData(_shpt, "sunLight[0]");
         GetError();
     }
     
     /// Set up point lights
-    {
-        // blue
-        CPointLight *l = _points[0];
-        l->vColor = glm::vec3(0.1f, 0.1f, 1.0f);
-        l->vPosition = glm::vec3(2.0f, 1.0f - cos(degreesToRadians(4 * par)), 2.0f);
-        l->fAmbient = 0.5f;
-        l->fConstantAtt = 0.0f;
-        l->fLinearAtt = 0.0f;
-        l->fExpAtt = 0.25f;
-        if (par == 0) {
-            l->active = !l->active;
-        }
-        
+    if ((1)) {
         // yellow
         float len = 2.0f;
-        l = _points[1];
-        l->vColor = glm::vec3(1.0f, 0.5f, 0.1f);
-        l->vPosition = glm::vec3(9.0f - len*cos(degreesToRadians(4 * par)),
-                                 0.0f + 0.5 * len*sin(degreesToRadians(2 * par)),
-                                 9.0f + 0.5 * len*sin(degreesToRadians(4 * par)));
+        CPointLight *l = _points[0];
+        l->vColor = glm::vec3(1.0f, 0.7f, 0.2f);
+        l->vPosition = glm::vec3(9.0f - len * cos(degreesToRadians(4 * par)),
+                                 2.0f + 1.0f * sin(degreesToRadians(2 * par)),
+                                 9.0f + 0.5f * len * sin(degreesToRadians(4 * par)));
+//        l->vPosition = glm::vec3(_px, _py, _pz);
         l->fAmbient = 1.0f;
         l->fConstantAtt = 0.0f;
         l->fLinearAtt = 0.0f;
@@ -69,23 +54,35 @@ void World::prepareFX() {
             0.02f, // Spawn delay
             30); // And spawn 30 particles
     }
-    
-    /// Upload point lights
-    {
-        int cnt = 0;
-        for (int i = 0; i < _points.size(); i++) {
-            CPointLight *l = _points[i];
-            if (l->active) {
-                l->SetUniformData(_shpt, "pointLights[" + std::to_string(cnt) + "]");
-                cnt++;
-            }
-        }
-        glUniform1i(_shpt->uniform("countPoint"), cnt);
-        GetError();
+    if ((1)) {
+        // blue
+        CPointLight *l = _points[1];
+        l->vColor = glm::vec3(0.25f, 0.3f, 1.0f);
+        l->vPosition = glm::vec3(2.0f, 1.5f - cos(degreesToRadians(4 * par)), 2.0f);
+        l->fAmbient = 1.0f;
+        l->fConstantAtt = 0.0f;
+        l->fLinearAtt = 0.0f;
+        l->fExpAtt = 0.1f;
+//        if (par == 0) {
+//            l->active = !l->active;
+//        }
+    }
+    if ((1)) {
+        // upper
+        float len = 5.0f;
+        CPointLight *l = _points[2];
+        l->vColor = glm::vec3(0.9f, 0.95f, 1.0f);
+        l->vPosition = glm::vec3(len * cos(degreesToRadians(par)),
+                                 10.0f,
+                                 len * sin(degreesToRadians(par)));
+        l->fAmbient = 1.0f;
+        l->fConstantAtt = 0.0f;
+        l->fLinearAtt = 0.0f;
+        l->fExpAtt = 0.02f;
     }
     
     /// Set up spot lights
-    {
+    if ((0)) {
         // green
         CSpotLight *l = _spots[0];
         l->vColor = glm::vec3(0.1f, 1.0f, 0.2f);
@@ -110,27 +107,6 @@ void World::prepareFX() {
                        0.0f));
         l->fConeAngle = 30.0f;
         l->fLinearAtt = 1.0f;
-    }
-    
-    /// Upload spot lights
-    {
-        int cnt = 0;
-        for (int i = 0; i < _spots.size(); i++) {
-            CSpotLight *l = _spots[i];
-            if (l->active) {
-                l->SetUniformData(_shpt, "spotLights[" + std::to_string(cnt) + "]");
-                cnt++;
-            }
-        }
-        glUniform1i(_shpt->uniform("countSpot"), cnt);
-        GetError();
-    }
-    
-    // Set up fog
-    {
-        glUniform3fv(_shpt->uniform("vCameraPos"), 1, glm::value_ptr(glm::vec3(_px, _py, _pz)));
-        _fog.SetUniformData(_shpt, "fogParams[0]");
-        GetError();
     }
 }
 

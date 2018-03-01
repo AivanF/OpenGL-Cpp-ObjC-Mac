@@ -23,8 +23,8 @@ public:
     void use();
     
     GLuint index();
-    GLuint attr(const GLchar *name);
-    GLuint uniform(const GLchar *name);
+    GLint attr(const GLchar *name);
+    GLint uniform(const GLchar *name);
 };
 
 #endif /* ShaderProgram_hpp */

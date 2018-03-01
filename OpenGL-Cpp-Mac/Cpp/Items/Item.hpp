@@ -34,15 +34,19 @@ public:
     
     Item();
     virtual ~Item() {};
-    virtual void draw(ShaderProgram *shp) = 0;
+    virtual void draw(ShaderProgram *shpm, bool full) = 0;
     glm::mat4 apply();
     
     /// Sets position of the Item.
     Item* place(float x, float y, float z);
     /// Sets rotation of the Item.
     Item* rotate(float rx, float ry, float rz);
+    /// Sets rotation of the Item for X axes.
+    Item* rotateX(float rx);
     /// Sets rotation of the Item for Y axes.
     Item* rotateY(float ry);
+    /// Sets rotation of the Item for Z axes.
+    Item* rotateZ(float rz);
     /// Sets rotation speed of the Item.
     Item* kick(float rsx, float rsy, float rsz);
     /// Sets scale by axes of the Item.

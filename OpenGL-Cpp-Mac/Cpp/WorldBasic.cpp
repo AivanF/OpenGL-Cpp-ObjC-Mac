@@ -16,6 +16,7 @@
 #include "ItemSkyBox.hpp"
 #include "ItemModel.hpp"
 #include "ItemTorus.hpp"
+#include "pointLight.h"
 
 
 void loadTexture(CTexture &obj, const char* name) {
@@ -28,7 +29,7 @@ World::World() {
     //--------- Initial camera geometry
     
     _rx = 0; _ry = 0;
-    _px = 0; _py = -1; _pz = 2.0f;
+    _px = 0; _py = 2; _pz = 2.0f;
     map = nullptr;
     
     //--------- Create shaders
@@ -41,6 +42,14 @@ World::World() {
         _shpt->addShader(sh_full_frag);
         _shpt->linkProgram();
     }{
+        GLuint sh_simple_vert = makeShaderFromFile(GL_VERTEX_SHADER, "simple", "vert");
+        GLuint sh_simple_frag = makeShaderFromFile(GL_FRAGMENT_SHADER, "simple", "frag");
+        
+        _shps = new ShaderProgram();
+        _shps->addShader(sh_simple_vert);
+        _shps->addShader(sh_simple_frag);
+        _shps->linkProgram();
+    }{
         GLuint sh_ortho_vert = makeShaderFromFile(GL_VERTEX_SHADER, "ortho2D", "vert");
 //        GLuint sh_ortho_frag = makeShaderFromFile(GL_FRAGMENT_SHADER, "ortho2D", "frag");
         GLuint sh_font_frag = makeShaderFromFile(GL_FRAGMENT_SHADER, "font2D", "frag");
@@ -49,16 +58,30 @@ World::World() {
         _shpf->addShader(sh_ortho_vert);
         _shpf->addShader(sh_font_frag);
         _shpf->linkProgram();
+    }{
+        GLuint sh_c2p_vert = makeShaderFromFile(GL_VERTEX_SHADER, "cube2plain", "vert");
+        GLuint sh_c2p_frag = makeShaderFromFile(GL_FRAGMENT_SHADER, "cube2plain", "frag");
+        
+        _shpc2p = new ShaderProgram();
+        _shpc2p->addShader(sh_c2p_vert);
+        _shpc2p->addShader(sh_c2p_frag);
+        _shpc2p->linkProgram();
     }
     
     //--------- Add basic items
     
-    // plane
-    _items.push_back(new ItemPlane(0, 1));
-    
-    // height map
-//    map = new ItemMap(getPath("path", "jpg"), 0, 1);
-//    _items.push_back(map);
+    if ((1)) {
+        // plane
+        _items.push_back(new ItemPlane(0, 1));
+//        _items.push_back((new ItemPlane(0, 1))->place(0.0f, -1.0f, 0.0f));
+//        _items.push_back((new ItemPlane(0, 1))->place(-20.0f, 10, 0)->rotateZ(90));
+//        _items.push_back((new ItemPlane(0, 1))->place(-20.5f, 10, 0)->rotateZ(90));
+        
+    } else {
+        // height map
+        map = new ItemMap(getPath("path", "jpg"), 0, 1);
+        _items.push_back(map);
+    }
     
     // tower
     _items.push_back((new ItemBox(2, 3))->place(5, 0, 6));
@@ -87,38 +110,39 @@ World::World() {
                                     0.0f, // addwidth
                                     0.5f, // tex in
                                     1 // tex out
-                                    ))->place(0, 8, 0)->kick(0.5f, 1.0f, 0.25f)->scaleAll(0.5f));
-    
-    _items.push_back((new ItemTorus(8, 9,
-                                    6, // count in
-                                    24, // count out
-                                    0.5f, // rad in
-                                    2.0f, // rad out
-                                    3, // turns count
-                                    4.0f, // add height
-                                    2.0f, // addwidth
-                                    1, // tex in
-                                    8 // tex out
-                                    ))->place(10, 15, 10)->kick(0.5f, -0.5f, 0.0f));
+                                    ))->place(1, 6, -1)->kick(0.5f, 1.0f, 0.25f)->scaleAll(0.5f));
+
+//    _items.push_back((new ItemTorus(8, 9,
+//                                    6, // count in
+//                                    24, // count out
+//                                    0.5f, // rad in
+//                                    2.0f, // rad out
+//                                    3, // turns count
+//                                    4.0f, // add height
+//                                    2.0f, // addwidth
+//                                    1, // tex in
+//                                    8 // tex out
+//                                    ))->place(10, 15, 10)->kick(0.5f, -0.5f, 0.0f));
     
     //--------- Add models
     
 //    Model *wolf = new Model(getPath("Wolf", "obj"));
-    Model *house = new Model(getPath("house", "3ds"));
-    Model *tree = new Model(getPath("DeadTree", "obj"));
     
 //    _items.push_back((new ItemModel(wolf))->place(-7, 0, -5.5)->rotateY(0));
 //    _items.push_back((new ItemModel(wolf))->place(-5.5f, 0, -4.5)->rotateY(30));
 //    _items.push_back((new ItemModel(wolf))->place(-3.5f, 0, -5.5)->rotateY(45));
     
-    _items.push_back((new ItemModel(house))->place(-6, 0, -12.5)->scaleAll(2)->rotateY(15));
-    
-    _items.push_back((new ItemModel(tree))->place(4, 0, -6.5)->rotateY(60));
-    _items.push_back((new ItemModel(tree))->place(5, 0, -12.5)->rotateY(90));
-    
-    _items.push_back((new ItemModel(tree))->place(-14, 0, -6.5)->rotateY(45));
-    _items.push_back((new ItemModel(tree))->place(-17, 0, -11.5)->rotateY(30));
-    _items.push_back((new ItemModel(tree))->place(-18, 0, -3.5)->rotateY(120));
+//    Model *house = new Model(getPath("house", "3ds"));
+//    Model *tree = new Model(getPath("DeadTree", "obj"));
+//    
+//    _items.push_back((new ItemModel(house))->place(-6, 0, -12.5)->scaleAll(2)->rotateY(15));
+//    
+//    _items.push_back((new ItemModel(tree))->place(4, 0, -6.5)->rotateY(60));
+//    _items.push_back((new ItemModel(tree))->place(5, 0, -12.5)->rotateY(90));
+//    
+//    _items.push_back((new ItemModel(tree))->place(-14, 0, -6.5)->rotateY(45));
+//    _items.push_back((new ItemModel(tree))->place(-17, 0, -11.5)->rotateY(30));
+//    _items.push_back((new ItemModel(tree))->place(-18, 0, -3.5)->rotateY(120));
     
     //--------- Add Sky Box
     
@@ -174,11 +198,12 @@ World::World() {
     
     _points.push_back(new CPointLight());
     _points.push_back(new CPointLight());
+    _points.push_back(new CPointLight());
     
     //--------- Add spot lights
     
-    _spots.push_back(new CSpotLight());
-    _spots.push_back(new CSpotLight());
+//    _spots.push_back(new CSpotLight());
+//    _spots.push_back(new CSpotLight());
     
     //--------- Load textures
     
@@ -228,13 +253,13 @@ void World::move(float mx, float my) {
     v = m * v;
 //    printf("- %f %f\n", _rx, _ry);
 //    printf("%f %f %f %f\n", v[0], v[1], v[2], v[3]);
-    _px += v[0];
-    _py += v[1];
-    _pz += v[2];
+    _px -= v[0];
+    _py -= v[1];
+    _pz -= v[2];
     
-    if (map) {
-        _py = -map->getHeight(_px, _pz) - 2;
-    }
+//    if (map) {
+//        _py = -map->getHeight(_px, _pz) - 2;
+//    }
 }
 
 void World::rotate(float rx, float ry) {
@@ -274,4 +299,18 @@ int World::fogtype() {
     return _fog.iEquation;
 }
 
+float World::getPX() {
+    return _px;
+}
 
+float World::getPY() {
+    return _py;
+}
+
+float World::getPZ() {
+    return _pz;
+}
+
+void World::nextLightPoint() {
+    light_target = (light_target+1)%_points.size();
+}

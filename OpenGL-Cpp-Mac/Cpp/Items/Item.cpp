@@ -37,8 +37,18 @@ Item* Item::rotate(float rx, float ry, float rz) {
     return this;
 }
 
+Item* Item::rotateX(float rx) {
+    _rx = rx;
+    return this;
+}
+
 Item* Item::rotateY(float ry) {
     _ry = ry;
+    return this;
+}
+
+Item* Item::rotateZ(float rz) {
+    _rz = rz;
     return this;
 }
 

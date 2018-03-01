@@ -27,7 +27,7 @@ public:
               int turnscnt, float addheight, float addwidth, float texin, float texout);
     ~ItemTorus() override;
     void pushPoint(const glm::vec3 &pos, const glm::vec3 &norm, const glm::vec2 &tex);
-    void draw(ShaderProgram *shp) override;
+    void draw(ShaderProgram *shp, bool full) override;
 };
 
 #endif /* ItemTorus_hpp */

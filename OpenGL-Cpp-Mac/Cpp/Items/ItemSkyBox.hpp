@@ -27,7 +27,7 @@ class ItemSkyBox : public Item {
 public:
     ItemSkyBox(int at1, int at2, int at3);
     ~ItemSkyBox() override;
-    void draw(ShaderProgram *shp) override;
+    void draw(ShaderProgram *shp, bool full) override;
 };
 
 

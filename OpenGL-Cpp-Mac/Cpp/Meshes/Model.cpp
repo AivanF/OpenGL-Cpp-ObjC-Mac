@@ -176,8 +176,6 @@ Model::~Model() {
 void Model::draw(ShaderProgram *s) {
     glBindVertexArray(uiVAO[0]);
     
-    glUniform1i(s->uniform("useNormalMap"), 0);
-    
     int iNumMeshes = ESZ(iMeshSizes);
     FOR(i, iNumMeshes) {
         int iMatIndex = iMaterialIndices[i];
@@ -185,7 +183,6 @@ void Model::draw(ShaderProgram *s) {
         glDrawArrays(GL_TRIANGLES, iMeshStartIndices[i], iMeshSizes[i]);
     }
     
-    glUniform1i(s->uniform("useNormalMap"), 1);
     GetError();
 }
 

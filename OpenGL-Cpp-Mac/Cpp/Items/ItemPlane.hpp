@@ -25,7 +25,7 @@ class ItemPlane : public Item {
 public:
     ItemPlane(int at1, int at3);
     ~ItemPlane() override;
-    void draw(ShaderProgram *shp) override;
+    void draw(ShaderProgram *shp, bool full) override;
 };
 
 #endif /* ItemPlane_hpp */

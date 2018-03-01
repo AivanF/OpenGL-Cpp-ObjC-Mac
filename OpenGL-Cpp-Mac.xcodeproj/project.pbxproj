@@ -93,6 +93,14 @@
 		85F22647202B51F2008BD1DF /* particles_update.geom in Resources */ = {isa = PBXBuildFile; fileRef = 85F22641202B51F2008BD1DF /* particles_update.geom */; };
 		85F22648202B51F2008BD1DF /* particles_update.vert in Resources */ = {isa = PBXBuildFile; fileRef = 85F22642202B51F2008BD1DF /* particles_update.vert */; };
 		85F2264C202B5D09008BD1DF /* particle.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 85F2264B202B5D09008BD1DF /* particle.jpg */; };
+		85F6CEE12046AD0700B9D030 /* CubeFBO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85F6CEDF2046AD0700B9D030 /* CubeFBO.cpp */; };
+		85F6CEE32046B5BA00B9D030 /* WorldDrawUsual.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85F6CEE22046B5BA00B9D030 /* WorldDrawUsual.cpp */; };
+		85F6CEE52046B67100B9D030 /* WorldRenderShadows.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85F6CEE42046B67100B9D030 /* WorldRenderShadows.cpp */; };
+		85F6CEE72046B8C400B9D030 /* simple.frag in Resources */ = {isa = PBXBuildFile; fileRef = 85F6CEE62046B8C400B9D030 /* simple.frag */; };
+		85F6CEEB204780BC00B9D030 /* simple.vert in Resources */ = {isa = PBXBuildFile; fileRef = 85F6CEEA204780BC00B9D030 /* simple.vert */; };
+		85F6CEEE2047E03800B9D030 /* CubeSimplifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85F6CEEC2047E03800B9D030 /* CubeSimplifier.cpp */; };
+		85F6CEF22047E37700B9D030 /* cube2plain.vert in Resources */ = {isa = PBXBuildFile; fileRef = 85F6CEF12047E37700B9D030 /* cube2plain.vert */; };
+		85F6CEF42047E38A00B9D030 /* cube2plain.frag in Resources */ = {isa = PBXBuildFile; fileRef = 85F6CEF32047E38A00B9D030 /* cube2plain.frag */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -207,6 +215,17 @@
 		85F22641202B51F2008BD1DF /* particles_update.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = particles_update.geom; path = SceneAssets/Shaders/particles_update.geom; sourceTree = "<group>"; };
 		85F22642202B51F2008BD1DF /* particles_update.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = particles_update.vert; path = SceneAssets/Shaders/particles_update.vert; sourceTree = "<group>"; };
 		85F2264B202B5D09008BD1DF /* particle.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = particle.jpg; path = SceneAssets/Textures/particle.jpg; sourceTree = "<group>"; };
+		85F6CEDF2046AD0700B9D030 /* CubeFBO.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CubeFBO.cpp; path = Cpp/Other/CubeFBO.cpp; sourceTree = "<group>"; };
+		85F6CEE02046AD0700B9D030 /* CubeFBO.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CubeFBO.hpp; path = Cpp/Other/CubeFBO.hpp; sourceTree = "<group>"; };
+		85F6CEE22046B5BA00B9D030 /* WorldDrawUsual.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WorldDrawUsual.cpp; path = Cpp/WorldDrawUsual.cpp; sourceTree = "<group>"; };
+		85F6CEE42046B67100B9D030 /* WorldRenderShadows.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WorldRenderShadows.cpp; path = Cpp/WorldRenderShadows.cpp; sourceTree = "<group>"; };
+		85F6CEE62046B8C400B9D030 /* simple.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = simple.frag; path = SceneAssets/Shaders/simple.frag; sourceTree = "<group>"; };
+		85F6CEE820477C0500B9D030 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
+		85F6CEEA204780BC00B9D030 /* simple.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = simple.vert; path = SceneAssets/Shaders/simple.vert; sourceTree = "<group>"; };
+		85F6CEEC2047E03800B9D030 /* CubeSimplifier.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CubeSimplifier.cpp; path = Cpp/Other/CubeSimplifier.cpp; sourceTree = "<group>"; };
+		85F6CEED2047E03800B9D030 /* CubeSimplifier.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CubeSimplifier.hpp; path = Cpp/Other/CubeSimplifier.hpp; sourceTree = "<group>"; };
+		85F6CEF12047E37700B9D030 /* cube2plain.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = cube2plain.vert; path = SceneAssets/Shaders/cube2plain.vert; sourceTree = "<group>"; };
+		85F6CEF32047E38A00B9D030 /* cube2plain.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = cube2plain.frag; path = SceneAssets/Shaders/cube2plain.frag; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -282,7 +301,9 @@
 			children = (
 				859750D020299DE1001C5D08 /* World.hpp */,
 				859750D120299DE1001C5D08 /* WorldBasic.cpp */,
+				85F6CEE42046B67100B9D030 /* WorldRenderShadows.cpp */,
 				859750D320299DE1001C5D08 /* WorldFX.cpp */,
+				85F6CEE22046B5BA00B9D030 /* WorldDrawUsual.cpp */,
 				859750D220299DE1001C5D08 /* WorldDraw.cpp */,
 				859750CB20299DA8001C5D08 /* FX */,
 				859750CF20299DD0001C5D08 /* Meshes */,
@@ -456,6 +477,7 @@
 		8597510920299FC3001C5D08 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				85F6CEE820477C0500B9D030 /* SpriteKit.framework */,
 				85E581EC202AF39200556F5E /* libfreetype.6.dylib */,
 				859751102029A0B5001C5D08 /* libfreeimage.a */,
 				8597510E20299FE3001C5D08 /* libassimp.4.0.0.dylib */,
@@ -478,6 +500,10 @@
 				85E581E5202AEF1F00556F5E /* FreeTypeFont.cpp */,
 				85F2263B202B506D008BD1DF /* ParticleSystem.hpp */,
 				85F2263A202B506D008BD1DF /* ParticleSystem.cpp */,
+				85F6CEE02046AD0700B9D030 /* CubeFBO.hpp */,
+				85F6CEDF2046AD0700B9D030 /* CubeFBO.cpp */,
+				85F6CEED2047E03800B9D030 /* CubeSimplifier.hpp */,
+				85F6CEEC2047E03800B9D030 /* CubeSimplifier.cpp */,
 			);
 			name = Other;
 			sourceTree = "<group>";
@@ -514,6 +540,10 @@
 				85E581FD202B109800556F5E /* font2D.frag */,
 				859750A420299CB1001C5D08 /* full.vert */,
 				859750A320299CB1001C5D08 /* full.frag */,
+				85F6CEEA204780BC00B9D030 /* simple.vert */,
+				85F6CEE62046B8C400B9D030 /* simple.frag */,
+				85F6CEF12047E37700B9D030 /* cube2plain.vert */,
+				85F6CEF32047E38A00B9D030 /* cube2plain.frag */,
 			);
 			name = Other;
 			sourceTree = "<group>";
@@ -588,14 +618,18 @@
 				85EF9759202C0256008141D8 /* path.jpg in Resources */,
 				859750C920299CC9001C5D08 /* sky_snow.jpg in Resources */,
 				8586AB1020457EA9004C83BD /* Wolf_fur_N.tga in Resources */,
+				85F6CEE72046B8C400B9D030 /* simple.frag in Resources */,
 				859750C820299CC9001C5D08 /* sky_snow_n.jpg in Resources */,
 				8586AB0D20457EA9004C83BD /* Wolf.obj in Resources */,
 				859750B620299CBF001C5D08 /* box1.jpg in Resources */,
 				859750B320299CBF001C5D08 /* box_n.jpg in Resources */,
+				85F6CEF42047E38A00B9D030 /* cube2plain.frag in Resources */,
 				85F22647202B51F2008BD1DF /* particles_update.geom in Resources */,
 				85E581F6202B03D600556F5E /* Pacifico.ttf in Resources */,
 				85E581FC202B0F3100556F5E /* ortho2D.vert in Resources */,
+				85F6CEF22047E37700B9D030 /* cube2plain.vert in Resources */,
 				859750B920299CBF001C5D08 /* grass_n.jpg in Resources */,
+				85F6CEEB204780BC00B9D030 /* simple.vert in Resources */,
 				859750B420299CBF001C5D08 /* box.jpg in Resources */,
 				8586AB1F20457EBA004C83BD /* house.ms3d in Resources */,
 				8586AAFD20457E94004C83BD /* BarkPine0009_1_S.jpg in Resources */,
@@ -646,8 +680,10 @@
 				8597510320299E32001C5D08 /* ItemSkyBox.cpp in Sources */,
 				85D18D75203D8F37004D968C /* ItemTorus.cpp in Sources */,
 				8597510220299E32001C5D08 /* ItemPlane.cpp in Sources */,
+				85F6CEE52046B67100B9D030 /* WorldRenderShadows.cpp in Sources */,
 				859750E020299DEB001C5D08 /* fog.cpp in Sources */,
 				859750E120299DEB001C5D08 /* pointLight.cpp in Sources */,
+				85F6CEE12046AD0700B9D030 /* CubeFBO.cpp in Sources */,
 				85E581E7202AEF1F00556F5E /* FreeTypeFont.cpp in Sources */,
 				85E581EB202AEF7E00556F5E /* Texture.cpp in Sources */,
 				85E58201202B11E200556F5E /* ShaderProgram.cpp in Sources */,
@@ -656,6 +692,7 @@
 				859750E520299DFF001C5D08 /* Model.cpp in Sources */,
 				85EF9757202BFA1F008141D8 /* VertexBufferObject.cpp in Sources */,
 				8597506A202999CE001C5D08 /* ViewController.m in Sources */,
+				85F6CEEE2047E03800B9D030 /* CubeSimplifier.cpp in Sources */,
 				8597506D202999F5001C5D08 /* MyOpenGLView.mm in Sources */,
 				859750ED20299E11001C5D08 /* shaders.mm in Sources */,
 				859750D620299DE1001C5D08 /* WorldFX.cpp in Sources */,
@@ -664,6 +701,7 @@
 				8597507120299BDA001C5D08 /* main.m in Sources */,
 				8597510120299E32001C5D08 /* ItemModel.cpp in Sources */,
 				8597510020299E32001C5D08 /* ItemBox.cpp in Sources */,
+				85F6CEE32046B5BA00B9D030 /* WorldDrawUsual.cpp in Sources */,
 				85F2263C202B506D008BD1DF /* ParticleSystem.cpp in Sources */,
 				85975069202999CE001C5D08 /* AppDelegate.m in Sources */,
 				859750D420299DE1001C5D08 /* WorldBasic.cpp in Sources */,

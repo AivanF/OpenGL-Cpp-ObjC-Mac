@@ -1,22 +1,19 @@
 //
-//  ItemSkyBox.cpp
+//  CubeSimplifier.cpp
 //  OpenGL-Cpp-Mac
 //
-//  Created by Barsehv Ivan on 06/12/2017.
+//  Created by Barsehv Ivan on 24/02/2018.
 //
 
-#include "ItemSkyBox.hpp"
-#include "ShaderProgram.hpp"
+#include "CubeSimplifier.hpp"
 #include "helper.hpp"
+
+#include "../../glm/glm.hpp"
 #include "../../glm/gtc/type_ptr.hpp"
+#include "../../glm/gtc/matrix_transform.hpp"
 
 
-ItemSkyBox::ItemSkyBox(int at1, int at2, int at3) : Item() {
-    _py = 1;
-    _ry = 0.0f; _sc = 1.0f;
-    t1 = at1;
-    t2 = at2;
-    t3 = at3;
+CubeSimplifier::CubeSimplifier() {
     
     int i = 0;
     ver[i++] = -1.0f; ver[i++] = 1.0f; ver[i++] = -1.0f;//0
@@ -48,37 +45,6 @@ ItemSkyBox::ItemSkyBox(int at1, int at2, int at3) : Item() {
     ver[i++] = 1.0f; ver[i++] = 1.0f; ver[i++] = -1.0f;//21
     ver[i++] = 1.0f; ver[i++] = 1.0f; ver[i++] = 1.0f;//22
     ver[i++] = -1.0f; ver[i++] = 1.0f; ver[i++] = 1.0f;//23
-    
-    i = 0;
-    nor[i++] = -S1O3; nor[i++] = S1O3; nor[i++] = -S1O3;//0
-    nor[i++] = -S1O3; nor[i++] = S1O3; nor[i++] = S1O3;//1
-    nor[i++] = -S1O3; nor[i++] = -S1O3; nor[i++] = S1O3;//2
-    nor[i++] = -S1O3; nor[i++] = -S1O3; nor[i++] = -S1O3;//3
-    
-    nor[i++] = -S1O3; nor[i++] = S1O3; nor[i++] = S1O3;//4
-    nor[i++] = S1O3; nor[i++] = S1O3; nor[i++] = S1O3;//5
-    nor[i++] = S1O3; nor[i++] = -S1O3; nor[i++] = S1O3;//6
-    nor[i++] = -S1O3; nor[i++] = -S1O3; nor[i++] = S1O3;//7
-    
-    nor[i++] = S1O3; nor[i++] = S1O3; nor[i++] = S1O3;//8
-    nor[i++] = S1O3; nor[i++] = S1O3; nor[i++] = -S1O3;//9
-    nor[i++] = S1O3; nor[i++] = -S1O3; nor[i++] = -S1O3;//10
-    nor[i++] = S1O3; nor[i++] = -S1O3; nor[i++] = S1O3;//11
-    
-    nor[i++] = S1O3; nor[i++] = S1O3; nor[i++] = -S1O3;//12
-    nor[i++] = -S1O3; nor[i++] = S1O3; nor[i++] = -S1O3;//13
-    nor[i++] = -S1O3; nor[i++] = -S1O3; nor[i++] = -S1O3;//14
-    nor[i++] = S1O3; nor[i++] = -S1O3; nor[i++] = -S1O3;//15
-    
-    nor[i++] = -S1O3; nor[i++] = -S1O3; nor[i++] = S1O3;//16
-    nor[i++] = S1O3; nor[i++] = -S1O3; nor[i++] = S1O3;//17
-    nor[i++] = S1O3; nor[i++] = -S1O3; nor[i++] = -S1O3;//18
-    nor[i++] = -S1O3; nor[i++] = -S1O3; nor[i++] = -S1O3;//19
-    
-    nor[i++] = -S1O3; nor[i++] = S1O3; nor[i++] = -S1O3;//20
-    nor[i++] = S1O3; nor[i++] = S1O3; nor[i++] = -S1O3;//21
-    nor[i++] = S1O3; nor[i++] = S1O3; nor[i++] = S1O3;//22
-    nor[i++] = -S1O3; nor[i++] = S1O3; nor[i++] = S1O3;//23
     
     i = 0;
     tex[i++] = 0; tex[i++] = R1O3;//0
@@ -128,13 +94,12 @@ ItemSkyBox::ItemSkyBox(int at1, int at2, int at3) : Item() {
     els[i++] = 23; els[i++] = 22; els[i++] = 21;//11
     
     glGenVertexArrays(1, &uiVAO[0]);
-    glGenBuffers(4, &uiVBO[0]);
+    glGenBuffers(3, &uiVBO[0]);
     GetError();
     
     glBindVertexArray(uiVAO[0]);
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
-    glEnableVertexAttribArray(2);
     GetError();
     
     glBindBuffer(GL_ARRAY_BUFFER, uiVBO[0]);
@@ -143,49 +108,47 @@ ItemSkyBox::ItemSkyBox(int at1, int at2, int at3) : Item() {
     GetError();
     
     glBindBuffer(GL_ARRAY_BUFFER, uiVBO[1]);
-    glBufferData(GL_ARRAY_BUFFER, 3*6*4*sizeof(float), nor, GL_STATIC_DRAW);
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, uiVBO[2]);
     glBufferData(GL_ARRAY_BUFFER, 2*6*4*sizeof(float), tex, GL_STATIC_DRAW);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
     GetError();
     
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, uiVBO[3]);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, uiVBO[2]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3*2*6*sizeof(char), els, GL_STATIC_DRAW);
     GetError();
 }
 
-ItemSkyBox::~ItemSkyBox() {
+CubeSimplifier::~CubeSimplifier() {
     glDeleteVertexArrays(1, uiVAO);
-    glDeleteBuffers(4, uiVBO);
+    glDeleteBuffers(3, uiVBO);
     GetError();
 }
 
-void ItemSkyBox::draw(ShaderProgram *s, bool full) {
-    glm::mat4 mModel = apply();
-    glm::mat4 mNormal = transpose(inverse(mModel));
-    glUniformMatrix4fv(s->uniform("matrices.modelMatrix"), 1, GL_FALSE, glm::value_ptr(mModel));
-    glUniformMatrix4fv(s->uniform("matrices.normalMatrix"), 1, GL_FALSE, glm::value_ptr(mNormal));
+void CubeSimplifier::draw(GLuint cubemap, ShaderProgram *s,
+                          float w, float h, float mx, float my, float sx, float sy) {
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap);
+    glUniform1i(s->uniform("gSamplerCube"), 0);
     GetError();
     
-    if (full) {
-        glUniform1i(s->uniform("gSamplers[0]"), 0);
-        GetError();
-        glUniform1i(s->uniform("gSamplers[1]"), 1);
-        GetError();
-        glUniform1f(s->uniform("fTextureContributions[0]"), cf);
-        glUniform1f(s->uniform("fTextureContributions[1]"), 1.0f - cf);
-        glUniform1i(s->uniform("numTextures"), 2);
-        GetError();
-        glUniform1f(s->uniform("sunLight.fAmbient"), 1.0f);
-        glUniform3f(s->uniform("sunLight.vColor"), 1.0f, 1.0f, 1.0f);
-        glUniform3f(s->uniform("sunLight.vDirection"), 0.5f, 0.5f, 0.5f);
-        GetError();
-    }
+    glUniform1f(s->uniform("screenWidth"), w);
+    glUniform1f(s->uniform("screenHeight"), h);
+    
+    glm::mat4 mModelView = glm::mat4(1.0f);
+    mModelView = glm::translate(mModelView, glm::vec3(mx, my, 0.0f));
+    mModelView = glm::scale(mModelView, glm::vec3(sx, sy, 1.0f));
+    
+    glUniformMatrix4fv(s->uniform("matrices.modelViewMatrix"), 1, GL_FALSE, glm::value_ptr(mModelView));
+    GetError();
     
     glBindVertexArray(uiVAO[0]);
     GetError();
     glDrawElements(GL_TRIANGLES, 3*2*6, GL_UNSIGNED_BYTE, (void*)0);
     GetError();
 }
+
+
+
+
+
+
+

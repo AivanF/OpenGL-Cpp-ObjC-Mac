@@ -159,24 +159,27 @@ ItemBox::~ItemBox() {
     GetError();
 }
 
-void ItemBox::draw(ShaderProgram *s) {
+void ItemBox::draw(ShaderProgram *s, bool full) {
     glm::mat4 mModel = apply();
     glm::mat4 mNormal = transpose(inverse(mModel));
     glUniformMatrix4fv(s->uniform("matrices.modelMatrix"), 1, GL_FALSE, glm::value_ptr(mModel));
     glUniformMatrix4fv(s->uniform("matrices.normalMatrix"), 1, GL_FALSE, glm::value_ptr(mNormal));
+    GetError();
     
-    GetError();
-    glUniform1i(s->uniform("gSamplers[0]"), 0);
-    GetError();
-    glUniform1i(s->uniform("gSamplers[1]"), 1);
-    GetError();
-    glUniform1i(s->uniform("gSamplers[2]"), 2);
-    GetError();
-    glUniform1f(s->uniform("fTextureContributions[0]"), cf);
-    glUniform1f(s->uniform("fTextureContributions[1]"), 1.0f - cf);
-    glUniform1i(s->uniform("numTextures"), 2);
-    GetError();
+    if (full) {
+        glUniform1i(s->uniform("gSamplers[0]"), 0);
+        GetError();
+        glUniform1i(s->uniform("gSamplers[1]"), 1);
+        GetError();
+        glUniform1i(s->uniform("gSamplers[2]"), 2);
+        GetError();
+        glUniform1f(s->uniform("fTextureContributions[0]"), cf);
+        glUniform1f(s->uniform("fTextureContributions[1]"), 1.0f - cf);
+        glUniform1i(s->uniform("numTextures"), 2);
+        GetError();
+    }
     
     glBindVertexArray(uiVAO[0]);
     glDrawElements(GL_TRIANGLES, 3*2*6, GL_UNSIGNED_BYTE, (void*)0);
+    GetError();
 }

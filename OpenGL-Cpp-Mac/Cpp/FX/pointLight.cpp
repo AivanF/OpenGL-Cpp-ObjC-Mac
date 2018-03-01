@@ -12,6 +12,8 @@ CPointLight::CPointLight() {
     fExpAtt = 0.00008f;
     
     active = true;
+    
+    shadowMap.init(FBO_CUBE_SIZE);
 }
 
 CPointLight::CPointLight(glm::vec3 a_vColor, glm::vec3 a_vPosition, float a_fAmbient, float a_fConstantAtt, float a_fLinearAtt, float a_fExpAtt) {
@@ -25,6 +27,8 @@ CPointLight::CPointLight(glm::vec3 a_vColor, glm::vec3 a_vPosition, float a_fAmb
     fExpAtt = a_fExpAtt;
     
     active = true;
+    
+    shadowMap.init(FBO_CUBE_SIZE);
 }
 
 void CPointLight::SetUniformData(ShaderProgram *shp, std::string sLightVarName) {

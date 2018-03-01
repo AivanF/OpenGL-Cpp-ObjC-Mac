@@ -32,7 +32,7 @@ public:
     
     float getHeight(float x, float z);
     
-    void draw(ShaderProgram *shp) override;
+    void draw(ShaderProgram *shp, bool full) override;
 };
 
 #endif /* ItemMap_hpp */

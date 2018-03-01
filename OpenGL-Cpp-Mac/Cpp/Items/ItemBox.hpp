@@ -27,7 +27,7 @@ class ItemBox : public Item {
 public:
     ItemBox(int at1, int at3);
     ~ItemBox() override;
-    void draw(ShaderProgram *shp) override;
+    void draw(ShaderProgram *shp, bool full) override;
 };
 
 

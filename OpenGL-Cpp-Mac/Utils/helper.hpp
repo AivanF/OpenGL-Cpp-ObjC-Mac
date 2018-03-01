@@ -13,6 +13,10 @@
 #include <assert.h>
 #include "../glm/glm.hpp"
 
+#define R1O3 1.01f/3.0f
+#define R2O3 1.99f/3.0f
+#define S1O3 0.577350269189626f
+
 
 // Converts degrees to radians.
 #define degreesToRadians(angleDegrees) (angleDegrees * M_PI / 180.0f)
@@ -61,6 +65,6 @@ void printVec(float*, char cnt);
 
 const char* getPath(const char *name, const char *ext);
 const char* extractDirectory(const char *path);
-
+void checkFramebuffer();
 
 #endif /* __ERROR_H__ */

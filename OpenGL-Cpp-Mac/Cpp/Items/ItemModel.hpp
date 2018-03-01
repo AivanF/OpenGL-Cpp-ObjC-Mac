@@ -18,7 +18,7 @@ class ItemModel : public Item {
     
 public:
     ItemModel(Model *m);
-    void draw(ShaderProgram *shp) override;
+    void draw(ShaderProgram *shp, bool full) override;
 };
 
 #endif /* ItemModel_hpp */

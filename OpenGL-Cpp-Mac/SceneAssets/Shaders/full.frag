@@ -2,7 +2,6 @@
 
 smooth in vec2 vTexCoord;
 smooth in vec3 vNormal;
-smooth in vec3 vEyeSpacePos;
 smooth in vec3 vWorldPos;
 out vec4 outputColor;
 
@@ -12,10 +11,8 @@ uniform float time;
 uniform vec3 vCameraPos;
 uniform sampler2D gSamplers[3];
 uniform float fTextureContributions[2];
-uniform vec4 vColor;
 uniform int numTextures;
 uniform float useLights;
-
 
 // https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
 // https://thebookofshaders.com/11/
@@ -191,12 +188,13 @@ vec4 getSpotLightColor(const SpotLight spotLight, vec3 vWorldPos) {
     return vec4(0.0, 0.0, 0.0, 0.0);
 }
 
-#define MAX_SPOT 8
-#define MAX_POINT 16
+#define MAX_SPOT 4
+#define MAX_POINT 3
 
 uniform DirectionalLight sunLight[1];
 uniform SpotLight spotLights[MAX_SPOT];
 uniform PointLight pointLights[MAX_POINT];
+uniform samplerCube gCubeMaps[MAX_POINT];
 uniform int countPoint;
 uniform int countSpot;
 uniform int useNormalMap;
@@ -228,22 +226,15 @@ vec3 perturb_normal( vec3 N, vec3 V, vec2 texcoord, vec3 map ) {
     return normalize( TBN * map );
 }
 
-
-//vec3 rotateVector(vec3 target, vec3 basis) {
-//    vec3 new_y = normalize(basis);
-//    vec3 new_z = normalize(cross(new_y, vec3(0, 1, 0)));
-//    vec3 new_x = normalize(cross(new_y, new_z));
-//    return mat3(new_x, new_y, new_z) * target;
-//}
+float pointShadow(samplerCube cubemap, vec3 dir, float len) {
+    return float(len < texture(cubemap, dir).r + 0.01f);
+}
 
 
 void main() {
     float x = gl_FragCoord.x/screenWidth;
     float y = gl_FragCoord.y/screenHeight;
     float z = gl_FragCoord.z;
-    
-    /// For tests
-//    outputColor = vec4(vTexCoord, 1.0, 1.0);
     
     /// Calculate color by texture
     vec4 vTexColor1 = texture(gSamplers[0], vTexCoord);
@@ -257,7 +248,6 @@ void main() {
     vec3 dist = vCameraPos-vWorldPos;
     vec3 vModelNormal = normalize(vNormal);
     vec3 vRealNormal;
-//    vRealNormal = rotateVector(vMapNormal, vNormal);
     if (useNormalMap == 1) {
         vec3 vMapNormal = 2 * texture(gSamplers[2], vTexCoord).xyz - 1;
         vRealNormal = perturb_normal( vModelNormal, normalize(dist), vTexCoord, vMapNormal );
@@ -276,26 +266,77 @@ void main() {
     }
     for (i = 0; i < MAX_POINT; i++) {
         if (i < countPoint) {
-            vPointlightColor += max(vec4(0,0,0,0), getPointLightColor(pointLights[i], vWorldPos, vRealNormal));
+            vec4 gotPntClr = getPointLightColor(pointLights[i], vWorldPos, vRealNormal);
+            
+            vec3 LightDirection = vWorldPos - pointLights[i].vPosition;
+            LightDirection.x = -LightDirection.x;
+            LightDirection.y = -LightDirection.y;
+//            LightDirection.z = -LightDirection.z;
+            float Distance = length(LightDirection);
+            float mlen = length(LightDirection);
+            float ps = 0.05f;
+            float shad = 0;
+            shad += pointShadow(gCubeMaps[i], LightDirection + vec3(0, 0, 0), mlen);
+            
+            shad += pointShadow(gCubeMaps[i], LightDirection + vec3(ps, ps, ps), mlen);
+            shad += pointShadow(gCubeMaps[i], LightDirection + vec3(ps, ps, -ps), mlen);
+            shad += pointShadow(gCubeMaps[i], LightDirection + vec3(ps, -ps, ps), mlen);
+            shad += pointShadow(gCubeMaps[i], LightDirection + vec3(ps, -ps, -ps), mlen);
+            shad += pointShadow(gCubeMaps[i], LightDirection + vec3(-ps, ps, ps), mlen);
+            shad += pointShadow(gCubeMaps[i], LightDirection + vec3(-ps, ps, -ps), mlen);
+            shad += pointShadow(gCubeMaps[i], LightDirection + vec3(-ps, -ps, ps), mlen);
+            shad += pointShadow(gCubeMaps[i], LightDirection + vec3(-ps, -ps, -ps), mlen);
+            shad /= 9.0f;
+            
+//            shad += 0.25f * pointShadow(gCubeMaps[i], LightDirection + vec3(ps, ps, ps), mlen);
+//            shad += 0.5f * pointShadow(gCubeMaps[i], LightDirection + vec3(ps, ps, 0), mlen);
+//            shad += 0.25f * pointShadow(gCubeMaps[i], LightDirection + vec3(ps, ps, -ps), mlen);
+//            shad += 0.5f * pointShadow(gCubeMaps[i], LightDirection + vec3(ps, 0, ps), mlen);
+//            shad += pointShadow(gCubeMaps[i], LightDirection + vec3(ps, 0, 0), mlen);
+//            shad += 0.5f * pointShadow(gCubeMaps[i], LightDirection + vec3(ps, 0, -ps), mlen);
+//            shad += 0.25f * pointShadow(gCubeMaps[i], LightDirection + vec3(ps, -ps, ps), mlen);
+//            shad += 0.5f * pointShadow(gCubeMaps[i], LightDirection + vec3(ps, -ps, 0), mlen);
+//            shad += 0.25f * pointShadow(gCubeMaps[i], LightDirection + vec3(ps, -ps, -ps), mlen);
+//
+//            shad += 0.5f * pointShadow(gCubeMaps[i], LightDirection + vec3(0, ps, ps), mlen);
+//            shad += pointShadow(gCubeMaps[i], LightDirection + vec3(0, ps, 0), mlen);
+//            shad += 0.5f * pointShadow(gCubeMaps[i], LightDirection + vec3(0, ps, -ps), mlen);
+//            shad += pointShadow(gCubeMaps[i], LightDirection + vec3(0, 0, ps), mlen);
+//            shad += pointShadow(gCubeMaps[i], LightDirection + vec3(0, 0, 0), mlen);
+//            shad += pointShadow(gCubeMaps[i], LightDirection + vec3(0, 0, -ps), mlen);
+//            shad += 0.5f * pointShadow(gCubeMaps[i], LightDirection + vec3(0, -ps, ps), mlen);
+//            shad += pointShadow(gCubeMaps[i], LightDirection + vec3(0, -ps, 0), mlen);
+//            shad += 0.5f * pointShadow(gCubeMaps[i], LightDirection + vec3(0, -ps, -ps), mlen);
+//
+//            shad += 0.25f * pointShadow(gCubeMaps[i], LightDirection + vec3(-ps, ps, ps), mlen);
+//            shad += 0.5f * pointShadow(gCubeMaps[i], LightDirection + vec3(-ps, ps, 0), mlen);
+//            shad += 0.25f * pointShadow(gCubeMaps[i], LightDirection + vec3(-ps, ps, -ps), mlen);
+//            shad += 0.5f * pointShadow(gCubeMaps[i], LightDirection + vec3(-ps, 0, ps), mlen);
+//            shad += pointShadow(gCubeMaps[i], LightDirection + vec3(-ps, 0, 0), mlen);
+//            shad += 0.5f * pointShadow(gCubeMaps[i], LightDirection + vec3(-ps, 0, -ps), mlen);
+//            shad += 0.25f * pointShadow(gCubeMaps[i], LightDirection + vec3(-ps, -ps, ps), mlen);
+//            shad += 0.5f * pointShadow(gCubeMaps[i], LightDirection + vec3(-ps, -ps, 0), mlen);
+//            shad += 0.25f * pointShadow(gCubeMaps[i], LightDirection + vec3(-ps, -ps, -ps), mlen);
+//            shad /= 15.0f;
+            
+            vPointlightColor += mix(vec4(0), gotPntClr, shad);
         }
     }
+    // Prevent erasing of unused uniforms
+    outputColor += fogParams[0].vFogColor / 1000.0 + useLights / 100.0 + time / 1000.0;
+    
     /// Light may be added partially
     // make light not negative
-    vec4 u = useLights * (vDirLightColor + vSpotlightColor + vPointlightColor);
+    vec4 u = useLights * (vDirLightColor * 0.3f + vSpotlightColor + vPointlightColor);
     vec4 n = (1 - useLights) * vec4(1,1,1,1);
     vMixedColor = vMixedColor * (u + n);
     outputColor = vMixedColor;
-//    outputColor = vec4(sunLight[0].vColor, 1.0);
-    
-    float no1 = fbm(vec2(x * 15 + dist.y + time * 7, y * 15 + dist.x + time * 11));
-    float no2 = fbm(vec2(x * 13 + dist.x + time * 11, y * 13 + dist.y + time * 7));
-    float no = 0.3 + 0.7 * fbm(vec2(no1, no2));
-//    no = 1;
-//    float no = 0.3 + 0.7 * fbm(vec2( no2,fbm(vec2(no1, no2)) ));
-//    outputColor = vec4(no1, no2, 0, 1);
-    
-    float fFogCoord = distance(-vCameraPos, vWorldPos) * no;
-    outputColor = mix(outputColor, fogParams[0].vFogColor, getFogFactor(fogParams[0], fFogCoord));
+
+//    float no1 = fbm(vec2(x * 15 + dist.y + time * 7, y * 15 + dist.x + time * 11));
+//    float no2 = fbm(vec2(x * 13 + dist.x + time * 11, y * 13 + dist.y + time * 7));
+//    float no = 0.3 + 0.7 * fbm(vec2(no1, no2));
+//    float fFogCoord = distance(vCameraPos, vWorldPos) * no;
+//    outputColor = mix(outputColor, fogParams[0].vFogColor, getFogFactor(fogParams[0], fFogCoord));
 //    outputColor = vec4(x, y, z, 1);
 }
 

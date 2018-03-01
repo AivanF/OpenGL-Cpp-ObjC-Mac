@@ -13,7 +13,6 @@
 
 @interface MyOpenGLView () {
     NSTimer *Timer;
-    int screenWidth, screenHeight;
     World *w;
 }
 @end
@@ -22,11 +21,6 @@
 
 - (void)awakeFromNib {
     [self setAcceptsTouchEvents:YES];
-    NSScreen *screen = [[NSScreen screens] firstObject];
-    NSRect screenRect = [screen frame];
-    screenWidth = (int)screenRect.size.width;
-    screenHeight = (int)screenRect.size.height;
-    
     
     NSOpenGLPixelFormatAttribute attrs[] = {
         NSOpenGLPFADepthSize, 24,
@@ -69,20 +63,46 @@
         case 2:
             fogger = [NSString stringWithFormat:@"Exp^2 fog"];
             break;
-            
+
         default:
             fogger = [NSString stringWithFormat:@"No fog"];
             break;
     }
-    [_output setStringValue:[NSString stringWithFormat:@"Ry: %d° Rx: %d°\nP: %d %d %d\n%@",
+    NSString *kam, *face = @"";
+    kam = [NSString stringWithFormat:@"#%d", w->light_target+1];
+    switch (w->light_cube_face) {
+        case 0:
+            face = @"X+";
+            break;
+        case 1:
+            face = @"X-";
+            break;
+        case 2:
+            face = @"Y+";
+            break;
+        case 3:
+            face = @"Y-";
+            break;
+        case 4:
+            face = @"Z+";
+            break;
+        case 5:
+            face = @"Z-";
+            break;
+        default:
+            face = @"usual";
+            break;
+    }
+    [_output setStringValue:[NSString stringWithFormat:@"Ry: %d° Rx: %d°\nP: %d %d %d\n%@\nCamera: %@ %@",
                              (int)w->_ry, (int)w->_rx,
-                             (int)w->_px, (int)w->_py, (int)w->_pz,
-                             fogger]];
+                             (int)w->getPX(), (int)w->getPY(), (int)w->getPZ(),
+                             fogger, kam, face]];
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];
     w->draw(_bounds.size.width, _bounds.size.height);
+//    w->draw(1024, 768);
 }
 
 - (BOOL)acceptsFirstResponder {
@@ -158,6 +178,30 @@
         case 2:// D
             w->move(1, 0);
             break;
+        case 35:// P
+            w->nextLightPoint();
+            break;
+        case 18:
+            w->light_cube_face = 0;
+            break;
+        case 19:
+            w->light_cube_face = 1;
+            break;
+        case 20:
+            w->light_cube_face = 2;
+            break;
+        case 21:
+            w->light_cube_face = 3;
+            break;
+        case 23:
+            w->light_cube_face = 4;
+            break;
+        case 22:
+            w->light_cube_face = 5;
+            break;
+        case 26:
+            w->light_cube_face = 6;
+            break;
         case 36:// Enter
             w->keyEnter();
             break;
@@ -186,7 +230,7 @@
             w->move(0, -1);
             break;
         default:
-//            NSLog(@"Pressed key: %d", (int)key);
+            NSLog(@"Pressed key: %d", (int)key);
 //            [self interpretKeyEvents:[NSArray arrayWithObject:event]];
 //            [super keyDown:event];
             break;
