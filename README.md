@@ -12,6 +12,7 @@ My educational project: usage of OpenGL & C++ with Objective-C wrapper for Mac O
 - 3 kinds of **fog**: lineal, exponential, bi-exponential. In addition, it uses **Simplex Noise** and **Fractional Brownian Motion**,
  so, the result looks fantastic!
 - **Normal maps** are supported.
+- **Dynamic shadows** based on **Shadow Mapping**.
 - Time of day and Sun are implemented: see sunrises and sunsets.
 - Native Mac OS control: use **TrackPad** to move and rotate the camera.
 - **Particle systems** are implemented with geometry shaders.
@@ -30,6 +31,9 @@ My educational project: usage of OpenGL & C++ with Objective-C wrapper for Mac O
 - **Esc** – make a screenshot.
 - **Backspace** – turn normal maps on/off.
 - **Enter** – turn the lights on/off.
+- **1/2/3/4/5/6** – change camera to views from selected light source.
+- **7** – reset camera to default view.
+- **P** – Change selected light source.
 
 
 ---
@@ -73,6 +77,15 @@ And without normal maps:
 [This](http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-13-normal-mapping/)
 and [this](http://www.thetenthplanet.de/archives/1180) articles helped me to write the code for in-place
 Tangents and Cotangents calculation.
+
+
+---
+## Shadows
+
+Shadows are implemented with Cube Textures. The shader has artefacts smoothing with easily editable quality. In addition, it's possible to see content of each texture:
+
+![shadows0](https://raw.githubusercontent.com/AivanF/OpenGL-Cpp-ObjC-Mac/master/img/sh_0.png)
+![shadows_terr](https://raw.githubusercontent.com/AivanF/OpenGL-Cpp-ObjC-Mac/master/img/sh_terr.png)
 
 
 ---
